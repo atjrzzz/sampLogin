@@ -1,44 +1,124 @@
-import { firebaseConfig } from './firebase-config.js';
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+// Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDGGoyLp4FMlKPzpPtyU_og4K3VhGA_nb8",
+  authDomain: "jrnsnittech.firebaseapp.com",
+  projectId: "jrnsnittech",
+  storageBucket: "jrnsnittech.firebasestorage.app",
+  messagingSenderId: "397300477921",
+  appId: "1:397300477921:web:b3adf6cec936b2ecfc2ca0",
+  measurementId: "G-XL83DFE6K4"
+};
 
-// Handle authentication flow
-function handleLogin() {
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
 
-  auth.signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      // Redirect to desired page
-      window.location.href = '/jemenezjerson/jemenezjerson.html';
-    })
-    .catch((error) => {
-      showError(error);
-    });
+// Authentication Functions
+function toggleAuthMode() {
+    const form = document.getElementById('authForm');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const title = document.querySelector('h1');
+    
+    form.classList.toggle('signup');
+    submitBtn.textContent = form.classList.contains('signup') ? 'Sign Up' : 'Login';
+    title.textContent = form.classList.contains('signup') ? 'Sign Up' : 'Login';
 }
 
-// Helper functions for UI elements
-function showForm(formId) {
-  document.querySelectorAll('.form-container').forEach(form => form.style.display = 'none');
-  document.getElementById(formId).style.display = 'block';
+async function handleFormSubmit(e) {
+    e.preventDefault();
+    const isSignUp = document.getElementById('authForm').classList.contains('signup');
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    try {
+        showLoader();
+        
+        if (isSignUp) {
+            await createUserWithEmailAndPassword(auth, email, password);
+        } else {
+            await signInWithEmailAndPassword(auth, email, password);
+        }
+        
+        // Redirect after successful login
+        const user = auth.currentUser;
+        if (user) {
+            if (!user.emailVerified) {
+                alert('Please verify your email first');
+                signOut(auth);
+            } else {
+                window.location.href = '/jemenezjerson/jemenezjerson.html';
+            }
+        }
+    } catch (error) {
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = getErrorString(error.code);
+        errorMessage.classList.remove('hidden');
+    } finally {
+        hideLoader();
+    }
 }
 
-// Email verification and error handling
-function sendVerificationEmail() {
-  auth.currentUser.sendEmailVerification()
-    .then(() => {
-      showSuccessMessage('Verification email sent');
-    })
-    .catch((error) => showError(error));
+// Google Sign-In
+async function handleGoogleSignIn() {
+    const provider = new GoogleAuthProvider();
+    try {
+        showLoader();
+        await signInWithPopup(auth, provider);
+        window.location.href = '/jemenezjerson/jemenezjerson.html';
+    } catch (error) {
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = getErrorString(error.code);
+        errorMessage.classList.remove('hidden');
+    } finally {
+        hideLoader();
+    }
 }
 
-// Loading states
-function setLoading(isLoading) {
-  document.getElementById('overlay').style.display = isLoading ? 'block' : 'none';
+// Error Handling
+function getErrorString(errorCode) {
+    switch (errorCode) {
+        case 'auth/weak-password':
+            return 'Password should be at least 6 characters';
+        case 'auth/email-already-in-use':
+            return 'Email already exists';
+        case 'auth/user-not-found':
+            return 'User not found';
+        case 'auth/wrong-password':
+            return 'Incorrect password';
+        default:
+            return 'An error occurred';
+    }
+}
+
+// Password Reset
+function showResetForm() {
+    const resetForm = document.createElement('form');
+    resetForm.innerHTML = `
+        <input type="email" placeholder="Enter your email" id="resetEmail">
+        <button type="button" onclick="sendPasswordReset()">Send Reset Link</button>
+    `;
+    document.querySelector('.form-container').replaceChild(resetForm, document.getElementById('authForm'));
+}
+
+async function sendPasswordReset() {
+    const email = document.getElementById('resetEmail').value;
+    try {
+        await sendPasswordResetEmail(auth, email);
+        alert('Password reset link sent!');
+    } catch (error) {
+        alert(getErrorString(error.code));
+    }
+}
+
+// Loader Functions
+function showLoader() {
+    document.querySelector('.loader').classList.remove('hidden');
+}
+
+function hideLoader() {
+    document.querySelector('.loader').classList.add('hidden');
 }
 
 // Event Listeners
-document.getElementById('login-btn').addEventListener('click', handleLogin);
-document.getElementById('signup-btn').addEventListener('click', handleSignup);
-document.getElementById('forgot-btn').addEventListener('click', handleForgotPassword);
-// Add more event listeners...
+document.getElementById('authForm').addEventListener('submit', handleFormSubmit);
+document.querySelector('.google-btn').addEventListener('click', handleGoogleSignIn);
