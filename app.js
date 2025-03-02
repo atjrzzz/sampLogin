@@ -6,7 +6,7 @@ const firebaseConfig = {
   storageBucket: "jrnsnittech.firebasestorage.app",
   messagingSenderId: "397300477921",
   appId: "1:397300477921:web:b3adf6cec936b2ecfc2ca0",
-  measurementId: "G-XL83DFE6K4" ,
+  measurementId: "G-XL83DFE6K4",
 };
 
 // Initialize Firebase
