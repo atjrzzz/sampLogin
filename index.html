@@ -1,59 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Firebase Login Page</title>
-  <link rel="stylesheet" href="style.css" />
-  <!-- Firebase App (the core Firebase SDK) -->
-  <script defer src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
-  <script defer src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-  <div class="container">
-    <div id="spinner" class="spinner" style="display: none;"></div>
-    <h1>Login</h1>
-    <div id="message"></div>
-    <form id="login-form">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
-    <button id="google-signin">Sign in with Google</button>
-    <p>Don't have an account? <a href="#" id="register-link">Register here</a></p>
-    <p>Forgot your password? <a href="#" id="reset-link">Reset Password</a></p>
-  </div>
-
-  <!-- Registration Modal -->
-  <div id="register-modal" class="modal">
-    <div class="modal-content">
-      <span id="close-modal" class="close">&times;</span>
-      <h2>Register</h2>
-      <form id="register-form">
-        <input type="email" id="reg-email" placeholder="Email" required />
-        <input type="password" id="reg-password" placeholder="Password" required />
-        <button type="submit">Register</button>
-      </form>
+    <div class="container">
+        <div class="form-container">
+            <div class="logo">
+                <h1>Login</h1>
+            </div>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <a href="#" id="forgotPassword">Forgot Password?</a>
+            </form>
+            <button class="google-btn" onclick="googleSignIn()">Sign in with Google</button>
+            <div class="separator">OR</div>
+            <button class="toggle-form" onclick="toggleForm()">Sign Up</button>
+        </div>
+        <div id="loadingSpinner" class="spinner"></div>
+        <div id="welcomeModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <p id="welcomeMessage"></p>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Password Reset Modal -->
-  <div id="reset-modal" class="modal">
-    <div class="modal-content">
-      <span id="close-reset-modal" class="close">&times;</span>
-      <h2>Reset Password</h2>
-      <form id="reset-form">
-        <input type="email" id="reset-email" placeholder="Email" required />
-        <button type="submit">Reset Password</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Welcome Section -->
-  <div id="welcome" class="welcome" style="display:none;">
-    <h2>Welcome!</h2>
-    <button id="logout">Logout</button>
-  </div>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
