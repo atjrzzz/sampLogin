@@ -95,7 +95,7 @@ googleBtn.addEventListener('click', () => {
       })
       .catch(error => {
         hideSpinner();
-        showMessage(error.message);
+        showMessage("email & password invalid");
       });
   });
   
@@ -126,7 +126,7 @@ googleBtn.addEventListener('click', () => {
       })
       .catch(error => {
         hideSpinner();
-        showMessage(error.message);
+        showMessage("Please Register");
       });
   });
   
@@ -154,7 +154,7 @@ googleBtn.addEventListener('click', () => {
       })
       .catch(error => {
         hideSpinner();
-        showMessage(error.message);
+        showMessage("error.message");
       });
   });
   
