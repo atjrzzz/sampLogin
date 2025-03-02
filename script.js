@@ -1,124 +1,116 @@
-// Firebase Configuration
+// script.js
+
+// Firebase configuration (Replace with your own Firebase config)
 const firebaseConfig = {
     apiKey: "AIzaSyDGGoyLp4FMlKPzpPtyU_og4K3VhGA_nb8",
-  authDomain: "jrnsnittech.firebaseapp.com",
-  projectId: "jrnsnittech",
-  storageBucket: "jrnsnittech.firebasestorage.app",
-  messagingSenderId: "397300477921",
-  appId: "1:397300477921:web:b3adf6cec936b2ecfc2ca0",
-  measurementId: "G-XL83DFE6K4",
+    authDomain: "jrnsnittech.firebaseapp.com",
+    projectId: "jrnsnittech",
+    storageBucket: "jrnsnittech.firebasestorage.app",
+    messagingSenderId: "397300477921",
+    appId: "1:397300477921:web:b3adf6cec936b2ecfc2ca0",
+    measurementId: "G-XL83DFE6K4",
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-// Authentication Functions
-function toggleAuthMode() {
-    const form = document.getElementById('authForm');
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const title = document.querySelector('h1');
-    
-    form.classList.toggle('signup');
-    submitBtn.textContent = form.classList.contains('signup') ? 'Sign Up' : 'Login';
-    title.textContent = form.classList.contains('signup') ? 'Sign Up' : 'Login';
+// Show loading spinner
+function showSpinner() {
+    document.getElementById("spinner").style.display = "block";
 }
 
-async function handleFormSubmit(e) {
-    e.preventDefault();
-    const isSignUp = document.getElementById('authForm').classList.contains('signup');
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    
-    try {
-        showLoader();
-        
-        if (isSignUp) {
-            await createUserWithEmailAndPassword(auth, email, password);
-        } else {
-            await signInWithEmailAndPassword(auth, email, password);
-        }
-        
-        // Redirect after successful login
-        const user = auth.currentUser;
-        if (user) {
-            if (!user.emailVerified) {
-                alert('Please verify your email first');
-                signOut(auth);
+// Hide loading spinner
+function hideSpinner() {
+    document.getElementById("spinner").style.display = "none";
+}
+
+// Display error message
+function showError(message) {
+    document.getElementById("error-message").innerText = message;
+}
+
+// Login function
+function login() {
+    showSpinner();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            hideSpinner();
+            if (!userCredential.user.emailVerified) {
+                showError("Please verify your email before logging in.");
+                auth.signOut();
             } else {
-                window.location.href = '/jemenezjerson/jemenezjerson.html';
+                window.location.href = "/jemenezjerson/jemenezjerson.html"; // Redirect after login
             }
-        }
-    } catch (error) {
-        const errorMessage = document.getElementById('error-message');
-        errorMessage.textContent = getErrorString(error.code);
-        errorMessage.classList.remove('hidden');
-    } finally {
-        hideLoader();
-    }
+        })
+        .catch((error) => {
+            hideSpinner();
+            showError(error.message);
+        });
 }
 
 // Google Sign-In
-async function handleGoogleSignIn() {
-    const provider = new GoogleAuthProvider();
-    try {
-        showLoader();
-        await signInWithPopup(auth, provider);
-        window.location.href = '/jemenezjerson/jemenezjerson.html';
-    } catch (error) {
-        const errorMessage = document.getElementById('error-message');
-        errorMessage.textContent = getErrorString(error.code);
-        errorMessage.classList.remove('hidden');
-    } finally {
-        hideLoader();
+function googleSignIn() {
+    showSpinner();
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    auth.signInWithPopup(provider)
+        .then(() => {
+            hideSpinner();
+            window.location.href = "/jemenezjerson/jemenezjerson.html"; // Redirect after login
+        })
+        .catch((error) => {
+            hideSpinner();
+            showError(error.message);
+        });
+}
+
+// Password reset
+function resetPassword() {
+    const email = document.getElementById("email").value;
+    if (!email) {
+        showError("Please enter your email to reset password.");
+        return;
     }
+    auth.sendPasswordResetEmail(email)
+        .then(() => {
+            showError("Password reset email sent!");
+        })
+        .catch((error) => {
+            showError(error.message);
+        });
 }
 
-// Error Handling
-function getErrorString(errorCode) {
-    switch (errorCode) {
-        case 'auth/weak-password':
-            return 'Password should be at least 6 characters';
-        case 'auth/email-already-in-use':
-            return 'Email already exists';
-        case 'auth/user-not-found':
-            return 'User not found';
-        case 'auth/wrong-password':
-            return 'Incorrect password';
-        default:
-            return 'An error occurred';
+// Register function
+function register() {
+    showSpinner();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            hideSpinner();
+            userCredential.user.sendEmailVerification();
+            showError("Verification email sent. Please check your inbox.");
+            auth.signOut();
+        })
+        .catch((error) => {
+            hideSpinner();
+            showError(error.message);
+        });
+}
+
+// Session management
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        if (user.emailVerified) {
+            window.location.href = "/jemenezjerson/jemenezjerson.html"; // Redirect if logged in
+        } else {
+            showError("Please verify your email before accessing the site.");
+            auth.signOut();
+        }
     }
-}
-
-// Password Reset
-function showResetForm() {
-    const resetForm = document.createElement('form');
-    resetForm.innerHTML = `
-        <input type="email" placeholder="Enter your email" id="resetEmail">
-        <button type="button" onclick="sendPasswordReset()">Send Reset Link</button>
-    `;
-    document.querySelector('.form-container').replaceChild(resetForm, document.getElementById('authForm'));
-}
-
-async function sendPasswordReset() {
-    const email = document.getElementById('resetEmail').value;
-    try {
-        await sendPasswordResetEmail(auth, email);
-        alert('Password reset link sent!');
-    } catch (error) {
-        alert(getErrorString(error.code));
-    }
-}
-
-// Loader Functions
-function showLoader() {
-    document.querySelector('.loader').classList.remove('hidden');
-}
-
-function hideLoader() {
-    document.querySelector('.loader').classList.add('hidden');
-}
-
-// Event Listeners
-document.getElementById('authForm').addEventListener('submit', handleFormSubmit);
-document.querySelector('.google-btn').addEventListener('click', handleGoogleSignIn);
+});

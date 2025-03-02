@@ -5,26 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="form-container">
-            <h1>Login</h1>
-            <form id="authForm">
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <button type="submit">Login</button>
-                <button type="button" class="google-btn">Sign in with Google</button>
-                <p class="toggle-link" onclick="toggleAuthMode()">Need an account? Sign up</p>
-                <a href="#" class="forgot-password" onclick="showResetForm()">Forgot Password?</a>
-            </form>
-            <div id="error-message" class="hidden"></div>
-            <div class="loader hidden"></div>
-        </div>
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <button onclick="googleSignIn()">Sign in with Google</button>
+        <div id="spinner" class="hidden">Loading...</div>
+        <p id="error-message"></p>
+        <a href="#" onclick="resetPassword()">Forgot Password?</a>
+        <p>Don't have an account? <a href="#" onclick="register()">Sign up</a></p>
+        <p><a href="terms.html">Terms of Service</a> | <a href="privacy.html">Privacy Policy</a></p>
     </div>
-
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
