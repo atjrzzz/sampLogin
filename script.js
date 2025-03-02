@@ -1,5 +1,6 @@
 // Firebase configuration (replace with your project's config)
 const firebaseConfig = {
+  apiKey: "AIzaSyDGGoyLp4FMlKPzpPtyU_og4K3VhGA_nb8",
   authDomain: "jrnsnittech.firebaseapp.com",
   projectId: "jrnsnittech",
   storageBucket: "jrnsnittech.firebasestorage.app",
