@@ -74,7 +74,7 @@ loginForm.addEventListener('submit', e => {
       .then(userCredential => {
         hideSpinner();
         showMessage("Welcome!");
-        window.location.href = "https://atjrzzz.github.io/jrsnittech"; // Redirect after login
+        window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after login
       })
       .catch(error => {
         hideSpinner();
@@ -91,7 +91,7 @@ googleBtn.addEventListener('click', () => {
       .then(result => {
         hideSpinner();
         showMessage("Welcome!");
-        window.location.href = "https://atjrzzz.github.io/jrsnittech"; // Redirect after Google login
+        window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after Google login
       })
       .catch(error => {
         hideSpinner();
