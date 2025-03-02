@@ -1,13 +1,100 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: Arial; min-height: 100vh; }
-
-.content {
-  width: 400px; margin: 50px auto; position: relative;
-  background: white; padding: 40px; border-radius: 15px;
-  transition: transform 0.5s;
-  box-shadow: 0 15px 15px rgba(0,0,0,0.2);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-... (truncate for brevity)
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
+
+.container {
+    max-width: 400px;
+    width: 100%;
+}
+
+.form-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+form {
+    display: grid;
+    gap: 1rem;
+}
+
+input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    background: #ff6b6b;
+    color: white;
+    padding: 0.7rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #ff5252;
+}
+
+.google-btn {
+    background: #dd4b39;
+}
+
+.toggle-link, .forgot-password {
+    text-align: center;
+    display: block;
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none;
+}
+
+.dashboard {
+    text-align: center;
+    padding: 2rem;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 1rem;
+    }
+}
