@@ -1,124 +1,122 @@
-import { auth } from './firebase.js';
+// Firebase Config
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
 
-const loginForm = document.getElementById('loginForm');
-const forgotPasswordLink = document.getElementById('forgotPassword');
-const googleButton = document.querySelector('.google-btn');
-const loadingSpinner = document.getElementById('loadingSpinner');
-const welcomeModal = document.getElementById('welcomeModal');
-const welcomeMessage = document.getElementById('welcomeMessage');
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-let isSignUpForm = false;
+// DOM Elements
+const loader = document.querySelector('.loader');
+const loginForm = document.getElementById('login-form');
+const registerForm = document.getElementById('register-form');
+const toggleForm = document.getElementById('toggle-form');
+const errorMessage = document.querySelector('.error-message');
+const googleSignIn = document.getElementById('google-signin');
+const forgotPassword = document.getElementById('forgot-password');
 
-// Toggle between login and signup forms
-function toggleForm() {
-    const formFields = document.querySelectorAll('.form-container input');
-    const submitButton = loginForm.querySelector('button');
-    const toggleButton = document.querySelector('.toggle-form');
-    
-    if (isSignUpForm) {
-        formFields[1].placeholder = 'Password';
-        submitButton.textContent = 'Login';
-        toggleButton.textContent = 'Sign Up';
-        isSignUpForm = false;
-    } else {
-        formFields[1].placeholder = 'Confirm Password';
-        submitButton.textContent = 'Sign Up';
-        toggleButton.textContent = 'Login';
-        isSignUpForm = true;
-    }
+// Show Loader
+function showLoader() {
+    loader.style.display = 'block';
 }
 
-// Email/Password Authentication
-loginForm.addEventListener('submit', async (e) => {
+// Hide Loader
+function hideLoader() {
+    loader.style.display = 'none';
+}
+
+// Toggle Forms
+toggleForm.addEventListener('click', (e) => {
     e.preventDefault();
-    showLoading();
-    
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    
-    try {
-        if (isSignUpForm) {
-            const confirmPassword = password; // Implement confirmation check
-            if (password !== confirmPassword) {
-                throw new Error('Passwords do not match');
-            }
-            await auth.createUserWithEmailAndPassword(email, password);
-            const actionCodeSettings = {
-                url: 'https://your-domain.com/verified'
-            };
-            await sendVerificationEmail(email, actionCodeSettings);
-            alert('Verification email sent');
-        } else {
-            const userCredential = await auth.signInWithEmailAndPassword(email, password);
-            const user = userCredential.user;
-            if (!user.emailVerified) {
-                alert('Email not verified');
-                auth.signOut();
-            } else {
-                showWelcomeMessage(user.email);
-            }
-        }
-        hideLoading();
-    } catch (error) {
-        alert(error.message);
-        hideLoading();
-    }
+    loginForm.classList.toggle('hidden');
+    registerForm.classList.toggle('hidden');
+    document.getElementById('form-title').textContent = 
+        registerForm.classList.contains('hidden') ? 'Login' : 'Register';
+    toggleForm.textContent = 
+        registerForm.classList.contains('hidden') ? 'Create Account' : 'Login Here';
 });
 
-// Password Reset
-forgotPasswordLink.addEventListener('click', async (e) => {
+// Handle Errors
+function handleError(error) {
+    errorMessage.textContent = error.message;
+    setTimeout(() => {
+        errorMessage.textContent = '';
+    }, 5000);
+}
+
+// Login
+loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const email = prompt('Enter your email for reset');
-    if (email) {
-        try {
-            await auth.sendPasswordResetEmail(email);
-            alert('Password reset email sent');
-        } catch (error) {
-            alert(error.message);
-        }
-    }
+    showLoader();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    
+    auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+            alert('Welcome back!');
+        })
+        .catch(handleError)
+        .finally(hideLoader);
+});
+
+// Register
+registerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    showLoader();
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+    
+    auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            userCredential.user.sendEmailVerification();
+            alert('Verification email sent! Please check your inbox.');
+        })
+        .catch(handleError)
+        .finally(hideLoader);
 });
 
 // Google Sign-In
-function googleSignIn() {
-    showLoading();
+googleSignIn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showLoader();
     const provider = new firebase.auth.GoogleAuthProvider();
+    
     auth.signInWithPopup(provider)
-        .then((result) => {
-            const user = result.user;
-            showWelcomeMessage(user.email);
-            hideLoading();
+        .then(() => {
+            alert('Welcome!');
         })
-        .catch((error) => {
-            alert(error.message);
-            hideLoading();
-        });
-}
+        .catch(handleError)
+        .finally(hideLoader);
+});
 
-// Utilities
-function showLoading() {
-    loadingSpinner.style.display = 'block';
-}
-
-function hideLoading() {
-    loadingSpinner.style.display = 'none';
-}
-
-function showWelcomeMessage(email) {
-    welcomeMessage.textContent = `Welcome, ${email}`;
-    welcomeModal.style.display = 'block';
-}
-
-function closeModal() {
-    welcomeModal.style.display = 'none';
-}
-
-// Check auth state
-auth.onAuthStateChanged(user => {
-    if (user) {
-        if (!user.emailVerified && !user.providerData[0].providerId.includes('google')) {
-            auth.signOut();
-            alert('Email not verified');
-        }
+// Password Reset
+forgotPassword.addEventListener('click', (e) => {
+    e.preventDefault();
+    const email = prompt('Enter your email:');
+    if (email) {
+        auth.sendPasswordResetEmail(email)
+            .then(() => alert('Password reset email sent!'))
+            .catch(handleError);
     }
 });
+
+// Auth State Listener
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        if (!user.emailVerified) {
+            alert('Please verify your email address.');
+            auth.signOut();
+        }
+    }
+    hideLoader();
+});
+
+// Initial Load Check
+showLoader();
+setTimeout(hideLoader, 2000);
