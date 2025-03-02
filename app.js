@@ -50,7 +50,7 @@ function showError(error) {
 auth.onAuthStateChanged(user => {
     if (user) {
         if (user.emailVerified) {
-            window.location.href = 'dashboard.html';
+            window.location.href = '/jemenezjerson/jemenezjerson.html';
         } else {
             auth.signOut();
             showError({ code: 'auth/unverified-email', message: 'Please verify your email first' });
@@ -69,7 +69,7 @@ loginForm.addEventListener('submit', async (e) => {
     try {
         await auth.signInWithEmailAndPassword(email, password);
         alert(`Welcome back, ${email}! Redirecting...`);
-        window.location.href = 'dashboard.html';
+        window.location.href = '/jemenezjerson/jemenezjerson.html';
     } catch (error) {
         showError(error);
     } finally {
