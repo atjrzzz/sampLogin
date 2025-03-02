@@ -74,7 +74,7 @@ loginForm.addEventListener('submit', e => {
       .then(userCredential => {
         hideSpinner();
         showMessage("Welcome!");
-        window.location.href = "/jemenezjerson/jemenezjerson.html"; // Redirect after login
+        window.location.href = "/jemenezjerson/index.html"; // Redirect after login
       })
       .catch(error => {
         hideSpinner();
@@ -91,7 +91,7 @@ googleBtn.addEventListener('click', () => {
       .then(result => {
         hideSpinner();
         showMessage("Welcome!");
-        window.location.href = "/jemenezjerson/jemenezjerson.html"; // Redirect after Google login
+        window.location.href = "/jemenezjerson/index.html"; // Redirect after Google login
       })
       .catch(error => {
         hideSpinner();
