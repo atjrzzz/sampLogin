@@ -1,8 +1,11 @@
 // Firebase configuration (replace with your project's config)
 const firebaseConfig = {
-  apiKey: "AIzaSyDGGoyLp4FMlKPzpPtyU_og4K3VhGA_nb8",
   authDomain: "jrnsnittech.firebaseapp.com",
-  projectId: "jrnsnittech" ,
+  projectId: "jrnsnittech",
+  storageBucket: "jrnsnittech.firebasestorage.app",
+  messagingSenderId: "397300477921",
+  appId: "1:397300477921:web:b3adf6cec936b2ecfc2ca0",
+  measurementId: "G-XL83DFE6K4"
   // ... include other configuration keys as needed
 };
 
