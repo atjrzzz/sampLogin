@@ -9,7 +9,45 @@ const firebaseConfig = {
     messagingSenderId: "397300477921",
     appId: "1:397300477921:web:b3adf6cec936b2ecfc2ca0",
 };
-
+// Handle login with email and password
+loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    clearMessage();
+    showSpinner();
+    const email = emailInput.value;
+    const password = passwordInput.value;
+    auth.signInWithEmailAndPassword(email, password)
+      .catch(error => {
+        hideSpinner();
+        showMessage(error.message);
+      });
+  });
+  
+  // Handle Google Sign-In
+  googleBtn.addEventListener('click', () => {
+    clearMessage();
+    showSpinner();
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .catch(error => {
+        hideSpinner();
+        if (error.code === 'auth/popup-closed-by-user') {
+          showMessage("Popup closed. Please try again.");
+        } else {
+          showMessage(error.message);
+        }
+      });
+  });
+  
+  // Close modals when clicking outside
+  window.addEventListener('click', (e) => {
+    if (e.target === registerModal) {
+      registerModal.style.display = 'none';
+    }
+    if (e.target === resetModal) {
+      resetModal.style.display = 'none';
+    }
+  });
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
