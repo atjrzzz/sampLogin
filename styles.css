@@ -178,3 +178,9 @@ footer p {
     font-size: 14px;
 }
 
+/* Logo Styles */
+.logo {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
