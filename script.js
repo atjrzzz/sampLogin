@@ -63,18 +63,22 @@ const firebaseConfig = {
     }
   });
   
- /// Handle login with email and password
+let loginMethod = ''; // Variable to trace login method
+
+// Handle login with email and password
 loginForm.addEventListener('submit', e => {
   e.preventDefault();
   clearMessage();
   showSpinner();
+  loginMethod = 'email'; // Set login method to email
   const email = emailInput.value;
   const password = passwordInput.value;
   auth.signInWithEmailAndPassword(email, password)
     .then(userCredential => {
       hideSpinner();
       if (userCredential.user.emailVerified) {
-          showMessage("Welcome!");
+          showMessage("Welcome! You have logged in through your registered password.");
+          console.log(`Logged in using: ${loginMethod}`);
           window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after login
       } else {
           showMessage("Please verify your email before proceeding.");
@@ -91,13 +95,15 @@ loginForm.addEventListener('submit', e => {
 googleBtn.addEventListener('click', () => {
   clearMessage();
   showSpinner();
+   loginMethod = 'google'; // Set login method to Google
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider)
     .then(result => {
       hideSpinner();
       const user = result.user;
       if (user.emailVerified) {
-          showMessage("Welcome!");
+          showMessage("Welcome! You have logged in through Google Sign-In.");
+          console.log(`Logged in using: ${loginMethod}`);
           window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after Google login
       } else {
           user.updateProfile({ disabled: true }).then(() => {
@@ -142,6 +148,7 @@ googleBtn.addEventListener('click', () => {
         hideSpinner();
         showMessage("Registration successful! Check your email for verification.");
         registerModal.style.display = 'none';
+        console.log('Registered using: register form');
       })
       .catch(error => {
         hideSpinner();
