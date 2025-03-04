@@ -95,15 +95,20 @@ googleBtn.addEventListener('click', () => {
   auth.signInWithPopup(provider)
     .then(result => {
       hideSpinner();
-      if (result.user.emailVerified) {
+      const user = result.user;
+      if (user.emailVerified) {
           showMessage("Welcome!");
           window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after Google login
       } else {
-          result.user.sendEmailVerification().then(() => {
-              showMessage("Verification email sent. Please verify your email before proceeding.");
-              auth.signOut();
+          user.updateProfile({ disabled: true }).then(() => {
+              user.sendEmailVerification().then(() => {
+                  showMessage("Verification email sent. Please verify your email before proceeding.");
+                  auth.signOut();
+              }).catch(error => {
+                  showMessage("Error sending verification email: " + error.message);
+              });
           }).catch(error => {
-              showMessage("Error sending verification email: " + error.message);
+              showMessage("Error updating user profile: " + error.message);
           });
       }
     })
