@@ -1,14 +1,9 @@
-/*************  ✨ Codeium Command 🌟  *************/
 /* Global Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-    font-weight: bold;
-    background: -webkit-linear-gradient(red, black);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 body {
@@ -20,12 +15,8 @@ body {
     font-size: 1.2em;
     font-weight: bold; /* Set font weight to bold */
     color: #000; /* Set font color to black */
-    background: -webkit-linear-gradient(black, white);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
-  
 .container {
     width: 100%;
     max-width: 400px;
@@ -108,7 +99,6 @@ a:hover {
     color: #555;
 }
 
-  
 /* Spinner */
 .spinner {
     display: none;
@@ -121,17 +111,15 @@ a:hover {
     margin: 20px auto;
 }
 
-  
 @keyframes spin {
     0% {
-      transform: rotate(0deg);
+        transform: rotate(0deg);
     }
     100% {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
 }
 
-  
 /* Modal Styles */
 .modal {
     display: none;
@@ -145,7 +133,6 @@ a:hover {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-  
 .modal-content {
     background-color: #fff;
     margin: 15% auto;
@@ -157,7 +144,6 @@ a:hover {
     border-radius: 4px;
 }
 
-  
 .close {
     color: #aaa;
     float: right;
@@ -166,13 +152,11 @@ a:hover {
     cursor: pointer;
 }
 
-  
 .close:hover,
 .close:focus {
     color: black;
 }
 
-  
 /* Welcome Section */
 .welcome {
     text-align: center;
@@ -231,6 +215,3 @@ footer p {
 .content-container p {
     margin-bottom: 20px;
 }
-
-
-/******  d307b4df-0af3-4a45-9d62-195703d5c96a  *******/
