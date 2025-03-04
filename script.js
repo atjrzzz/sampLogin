@@ -165,6 +165,7 @@ googleBtn.addEventListener('click', () => {
         if (signInMethods.length === 0) {
           hideSpinner();
           showMessage("Email is not registered.");
+          resetModal.style.display = 'none';
         } else {
           auth.sendPasswordResetEmail(email)
             .then(() => {
