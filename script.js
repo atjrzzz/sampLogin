@@ -114,26 +114,7 @@ googleBtn.addEventListener('click', () => {
     registerModal.style.display = 'none';
   });
   
-  // Handle user registration
-  registerForm.addEventListener('submit', e => {
-    e.preventDefault();
-    clearMessage();
-    showSpinner();
-    const email = document.getElementById('reg-email').value;
-    const password = document.getElementById('reg-password').value;
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        // Send verification email
-        userCredential.user.sendEmailVerification();
-        hideSpinner();
-        showMessage("Registration successful! Check your email for verification.");
-        registerModal.style.display = 'none';
-      })
-      .catch(error => {
-        hideSpinner();
-        showMessage("Please Register");
-      });
-  });
+
   
   // Open password reset modal
   resetLink.addEventListener('click', () => {
