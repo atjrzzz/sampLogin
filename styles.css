@@ -11,6 +11,11 @@ body {
     align-items: center;
     height: 100vh;
     background: #f0f0f0;
+    font-size: 1.2em;
+    font-weight: bold;
+    background: -webkit-linear-gradient(black, white);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
   
 .container {
