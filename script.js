@@ -163,4 +163,22 @@ googleBtn.addEventListener('click', () => {
     auth.signOut();
     showMessage("Logged out successfully!");
   });
-  
+
+function registerUser(email, password) {
+    // ...existing code...
+    if (isValidRegistration(email, password)) {
+        if (isEmailVerified(email)) {
+            window.location.href = "https://another-site.com";
+        } else {
+            alert("Please verify your email before proceeding.");
+        }
+    } else {
+        alert("Registration failed. Please check your details and try again.");
+    }
+}
+
+function isEmailVerified(email) {
+    // Logic to check if the email is verified
+    // This is a placeholder function, replace with actual verification logic
+    return true; // Change this to actual verification check
+}
