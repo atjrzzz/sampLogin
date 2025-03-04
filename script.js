@@ -63,46 +63,51 @@ const firebaseConfig = {
     }
   });
   
-  /// Handle login with email and password
+ /// Handle login with email and password
 loginForm.addEventListener('submit', e => {
-    e.preventDefault();
-    clearMessage();
-    showSpinner();
-    const email = emailInput.value;
-    const password = passwordInput.value;
-    auth.signInWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        hideSpinner();
-        if (userCredential.user.emailVerified) {
-            showMessage("Welcome!");
-            window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after login
-        } else {
-            showMessage("Please verify your email before proceeding.");
-            auth.signOut();
-        }
-      })
-      .catch(error => {
-        hideSpinner();
-        showMessage(error.message);
-      });
-  });
-  
-  // Handle Google Sign-In
+  e.preventDefault();
+  clearMessage();
+  showSpinner();
+  const email = emailInput.value;
+  const password = passwordInput.value;
+  auth.signInWithEmailAndPassword(email, password)
+    .then(userCredential => {
+      hideSpinner();
+      if (userCredential.user.emailVerified) {
+          showMessage("Welcome!");
+          window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after login
+      } else {
+          showMessage("Please verify your email before proceeding.");
+          auth.signOut();
+      }
+    })
+    .catch(error => {
+      hideSpinner();
+      showMessage(error.message);
+    });
+});
+
+// Handle Google Sign-In
 googleBtn.addEventListener('click', () => {
-    clearMessage();
-    showSpinner();
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-      .then(result => {
-        hideSpinner();
-        showMessage("Welcome!");
-        window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after Google login
-      })
-      .catch(error => {
-        hideSpinner();
-        showMessage("email & password invalid");
-      });
-  });
+  clearMessage();
+  showSpinner();
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+    .then(result => {
+      hideSpinner();
+      if (result.user.emailVerified) {
+          showMessage("Welcome!");
+          window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after Google login
+      } else {
+          showMessage("Please verify your email before proceeding.");
+          auth.signOut();
+      }
+    })
+    .catch(error => {
+      hideSpinner();
+      showMessage("email & password invalid");
+    });
+});
   
   // Open registration modal
   registerLink.addEventListener('click', () => {
@@ -114,7 +119,26 @@ googleBtn.addEventListener('click', () => {
     registerModal.style.display = 'none';
   });
   
-
+  // Handle user registration
+  registerForm.addEventListener('submit', e => {
+    e.preventDefault();
+    clearMessage();
+    showSpinner();
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        // Send verification email
+        userCredential.user.sendEmailVerification();
+        hideSpinner();
+        showMessage("Registration successful! Check your email for verification.");
+        registerModal.style.display = 'none';
+      })
+      .catch(error => {
+        hideSpinner();
+        showMessage("Please Register");
+      });
+  });
   
   // Open password reset modal
   resetLink.addEventListener('click', () => {
@@ -149,22 +173,4 @@ googleBtn.addEventListener('click', () => {
     auth.signOut();
     showMessage("Logged out successfully!");
   });
-
-function registerUser(email, password) {
-    // ...existing code...
-    if (isValidRegistration(email, password)) {
-        if (isEmailVerified(email)) {
-            window.location.href = "https://another-site.com";
-        } else {
-            alert("Please verify your email before proceeding.");
-        }
-    } else {
-        alert("Registration failed. Please check your details and try again.");
-    }
-}
-
-function isEmailVerified(email) {
-    // Logic to check if the email is verified
-    // This is a placeholder function, replace with actual verification logic
-    return true; // Change this to actual verification check
-}
+  
