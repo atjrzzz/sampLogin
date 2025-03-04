@@ -73,8 +73,13 @@ loginForm.addEventListener('submit', e => {
     auth.signInWithEmailAndPassword(email, password)
       .then(userCredential => {
         hideSpinner();
-        showMessage("Welcome!");
-        window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after login
+        if (userCredential.user.emailVerified) {
+            showMessage("Welcome!");
+            window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after login
+        } else {
+            showMessage("Please verify your email before proceeding.");
+            auth.signOut();
+        }
       })
       .catch(error => {
         hideSpinner();
