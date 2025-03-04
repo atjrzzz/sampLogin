@@ -160,15 +160,27 @@ googleBtn.addEventListener('click', () => {
     clearMessage();
     showSpinner();
     const email = document.getElementById('reset-email').value;
-    auth.sendPasswordResetEmail(email)
-      .then(() => {
-        hideSpinner();
-        showMessage("Password reset email sent!");
-        resetModal.style.display = 'none';
+    auth.fetchSignInMethodsForEmail(email)
+      .then(signInMethods => {
+        if (signInMethods.length === 0) {
+          hideSpinner();
+          showMessage("Email is not registered.");
+        } else {
+          auth.sendPasswordResetEmail(email)
+            .then(() => {
+              hideSpinner();
+              showMessage("Password reset email sent!");
+              resetModal.style.display = 'none';
+            })
+            .catch(error => {
+              hideSpinner();
+              showMessage(error.message);
+            });
+        }
       })
       .catch(error => {
         hideSpinner();
-        showMessage("error.message");
+        showMessage(error.message);
       });
   });
   
