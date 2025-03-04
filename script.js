@@ -99,8 +99,12 @@ googleBtn.addEventListener('click', () => {
           showMessage("Welcome!");
           window.location.href = "https://atjrzzz.github.io/jrsnittech/index.html"; // Redirect after Google login
       } else {
-          showMessage("Please verify your email before proceeding.");
-          auth.signOut();
+          result.user.sendEmailVerification().then(() => {
+              showMessage("Verification email sent. Please verify your email before proceeding.");
+              auth.signOut();
+          }).catch(error => {
+              showMessage("Error sending verification email: " + error.message);
+          });
       }
     })
     .catch(error => {
@@ -173,4 +177,3 @@ googleBtn.addEventListener('click', () => {
     auth.signOut();
     showMessage("Logged out successfully!");
   });
-  
