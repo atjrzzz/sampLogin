@@ -189,3 +189,23 @@ footer p {
     margin-bottom: 20px;
 }
 
+/* Content Container Styles */
+.content-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    color: #333;
+    font-size: 1em;
+    line-height: 1.6;
+}
+.content-container h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+.content-container p {
+    margin-bottom: 20px;
+}
+
