@@ -130,7 +130,7 @@ a:hover {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.8); /* Changed to darker background */
 }
 
 .modal-content {
@@ -143,18 +143,21 @@ a:hover {
     text-align: center;
     border-radius: 4px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    color: #000; /* Changed text color to black */
 }
 
 .modal-content h2 {
     margin-top: 0;
+    color: #000; /* Changed text color to black */
 }
 
 .modal-content p {
     margin-bottom: 20px;
+    color: #000; /* Changed text color to black */
 }
 
 .modal-content button {
-    background-color: #4CAF50;
+    background-color: #000; /* Changed button background to black */
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -163,11 +166,11 @@ a:hover {
 }
 
 .modal-content button:hover {
-    background-color: #3e8e41;
+    background-color: #333; /* Changed hover background to dark gray */
 }
 
 .close {
-    color: #aaa;
+    color: #fff; /* Changed close button color to white */
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -176,7 +179,7 @@ a:hover {
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #ccc; /* Changed hover and focus color to light gray */
 }
 
 /* Welcome Section */
