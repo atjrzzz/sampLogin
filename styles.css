@@ -12,7 +12,8 @@ body {
     height: 100vh;
     background: #f0f0f0;
     font-size: 1.2em;
-    font-weight: bold;
+    font-weight: bold; /* Set font weight to bold */
+    color: #000; /* Set font color to black */
     background: -webkit-linear-gradient(black, white);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
